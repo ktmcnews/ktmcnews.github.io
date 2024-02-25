@@ -1,1 +1,146 @@
-<p1>Hello World</p1>
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://unpkg.com/7.css">
+<html>
+<head>
+<style>
+body {
+  background-image: url('bkg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+}
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+.left-align {
+	text-align: left;
+	float: left;
+}
+
+.right-align {
+	text-align: right;
+	float: right;
+}
+
+</style>
+</head>
+<body>
+
+<div class="background">
+  <div class="window glass active" style="max-width: 100%">
+    <div class="title-bar">
+      <div class="title-bar-text">觀瑪次世代 KTMC Gen Next</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+		<button aria-label="Maximize" disabled></button>
+        <button aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="window-body has-space">
+      <section class="tabs" style="max-width: 100%">
+	  <menu role="tablist" aria-label="Sample Tabs">
+		<button role="tab" aria-controls="tab-A" aria-selected="true">最新消息</button>
+		<button role="tab" aria-controls="tab-B">關於</button>
+		<button role="tab" aria-controls="tab-C">聯絡/報料</button>
+		<button role="tab" aria-controls="tab-D" disabled>Disabled Tab</button>
+	  </menu>
+	  <!-- the tab content -->
+	  <article role="tabpanel" id="tab-A">
+		<h4>隨時更新。</h4>
+		<ul role="listbox" class="has-shadow has-hover"  style="font-size: 20px;">
+			<a href="https://example.com"><li role="option"><span class="left-align">【港共暴政】黑警拘捕兩名男子涉訂閱披牀</span><span class="right-align">2047年1月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【軟對抗】良心消費指南</span><span class="right-align">2047年1月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【觀瑪校政】校方宣佈取消M1</span><span class="right-align">2047年1月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【關注組聲明】回應大公報就本報言論</span><span class="right-align">2024年7月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【民意調查】黑警拘捕兩名男子涉訂閱披牀</span><span class="right-align">2047年1月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【本報更新】黑警拘捕兩名男子涉訂閱披牀</span><span class="right-align">2047年1月1日</span><br></li></a>
+			<a href="https://example.com"><li role="option"><span class="left-align">【Fact Check】黑警拘捕兩名男子涉訂閱披牀</span><span class="right-align">2047年1月1日</span><br></li></a>
+		</ul>
+	  </article>
+	  <article role="tabpanel" id="tab-B" hidden>
+		<h3>關於</h3>
+		<img src="ng_badge.png" alt="logo">
+		<p>This tab contains a GroupBox</p>
+		
+	  </article>
+	  <article role="tabpanel" id="tab-C" hidden>
+		<h3>Disabling tabs</h3>
+		<p>Simply add a <code>disabled</code> attribute on the tab.</p>
+		<h3>Justified tabs</h3>
+		<p>Add the <code>justified</code> class to the <code>tablist</code> menu to make the tabs, well, justified.</p>
+	  </article>
+	  <article role="tabpanel" id="tab-D" hidden>
+		<h3>Disabled Tab</h3>
+		<p>This tab is disabled, so you should not be able to read this.</p>
+	  </article>
+	  </section>
+	</div>
+  </div>
+</div>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const tabList = document.querySelector('[role="tablist"]');
+
+  // Add a click event handler to each tab
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", changeTabs);
+  });
+
+  // Enable arrow navigation between tabs in the tab list
+  let tabFocus = 0;
+
+  tabList.addEventListener("keydown", (e) => {
+    // Move right
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      tabs[tabFocus].setAttribute("tabindex", -1);
+      if (e.key === "ArrowRight") {
+        tabFocus++;
+        // If we're at the end, go to the start
+        if (tabFocus >= tabs.length) {
+          tabFocus = 0;
+        }
+        // Move left
+      } else if (e.key === "ArrowLeft") {
+        tabFocus--;
+        // If we're at the start, move to the end
+        if (tabFocus < 0) {
+          tabFocus = tabs.length - 1;
+        }
+      }
+
+      tabs[tabFocus].setAttribute("tabindex", 0);
+      tabs[tabFocus].focus();
+    }
+  });
+});
+
+function changeTabs(e) {
+  const target = e.target;
+  const parent = target.parentNode;
+  const grandparent = parent.parentNode;
+
+  // Remove all current selected tabs
+  parent
+    .querySelectorAll('[aria-selected="true"]')
+    .forEach((t) => t.setAttribute("aria-selected", false));
+
+  // Set this tab as selected
+  target.setAttribute("aria-selected", true);
+
+  // Hide all tab panels
+  grandparent
+    .querySelectorAll('[role="tabpanel"]')
+    .forEach((p) => p.setAttribute("hidden", true));
+
+  // Show the selected panel
+  grandparent.parentNode
+    .querySelector(`#${target.getAttribute("aria-controls")}`)
+    .removeAttribute("hidden");
+}
+</script>
+</body>
+</html>
+
